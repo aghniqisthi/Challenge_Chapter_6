@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">Challenge Chapter 6</string>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+    <string name="btn_kembali">Kembali</string>
+    <string name="home_welcome">Selamat Datang, </string>
+    <string name="home_ourproduct">Produk Kami</string>
+
+    <string name="cart">Keranjang</string>
+
+    <string name="login">Login</string>
+    <string name="login_username">Username</string>
+    <string name="login_pass">Password</string>
+    <string name="login_regis">Belum punya akun?</string>
+
+    <string name="profile">Profile</string>
+    <string name="profile_name">Nama</string>
+    <string name="profile_age">Usia</string>
+    <string name="profile_addr">Alamat</string>
+    <string name="profile_idn">Indonesia</string>
+    <string name="profile_eng">Inggris</string>
+    <string name="profile_kor">Korea</string>
+    <string name="profile_update">Perbarui Data</string>
+    <string name="profile_logout">Keluar</string>
+
+    <string name="register">Register</string>
+    <string name="regis_confpass">Konfirmasi Password</string>
+
+</resources>
