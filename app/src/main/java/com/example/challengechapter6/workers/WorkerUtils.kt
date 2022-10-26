@@ -2,38 +2,29 @@ package com.example.challengechapter6.workers
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
+import android.provider.MediaStore
 import android.renderscript.Allocation
 import android.renderscript.Element
 import android.renderscript.RenderScript
 import android.renderscript.ScriptIntrinsicBlur
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.example.challengechapter6.R
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.log
 
 fun makeStatusNotification(message: String, context: Context) {
-
-    // Make a channel if necessary
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        // Create the NotificationChannel, but only on API 26+ because NotificationChannel class is new and not in the support library
-        val name = VERBOSE_NOTIFICATION_CHANNEL_NAME
-        val description = VERBOSE_NOTIFICATION_CHANNEL_DESCRIPTION
-        val importance = NotificationManager.IMPORTANCE_HIGH
-        val channel = NotificationChannel(CHANNEL_ID, name, importance)
-        channel.description = description
-
-        // Add the channel
-        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
-        notificationManager?.createNotificationChannel(channel)
-    }
-
     // Create the notification
     val builder = NotificationCompat.Builder(context, CHANNEL_ID)
         .setSmallIcon(R.drawable.ic_launcher_foreground)
@@ -94,4 +85,48 @@ fun writeBitmapToFile(applicationContext: Context, bitmap: Bitmap): Uri {
     }
     return Uri.fromFile(outputFile)
 }
+
+fun cleanUpTempFiles(applicationContext: Context) {
+    // Output Directory where the temporary image files are present
+    val outputDir = File(applicationContext.filesDir, OUTPUT_PATH)
+    // Check if the Output Directory exists
+    if (outputDir.exists()) {
+        // When the Output Directory exists
+        // Get all PNG files in the folder and delete them
+        outputDir.listFiles()?.forEach { file: File? ->
+            file?.takeIf { it.name.isNotEmpty() && it.name.endsWith(".png") }?.run {
+                // Delete the temporary PNG file
+                val isFileDeleted = delete()
+                // Log the delete result
+                Log.i(TAG, "Deleted $name - $isFileDeleted")
+            }
+        }
+    }
+}
+
+fun saveImageToMedia(applicationContext: Context, bitmapToSaveUriStr: String?): String? {
+    // Do not do anything if the Uri string is invalid or empty
+    if (bitmapToSaveUriStr.isNullOrEmpty()) return null
+
+    // Get the ContentResolver instance
+    val contentResolver = applicationContext.contentResolver
+
+    // Get the Bitmap to be saved from the given Uri
+    val bitmapToSave = BitmapFactory.decodeStream(
+        contentResolver.openInputStream(Uri.parse(bitmapToSaveUriStr))
+    )
+
+    // Get the Date Formatter
+    val dateFormatter = SimpleDateFormat(DATE_FORMAT, Locale.getDefault())
+
+    // Write the Image file to MediaStore filesystem and return its Uri String
+    return MediaStore.Images.Media.insertImage(
+        contentResolver,
+        bitmapToSave,
+        TITLE_IMAGE,
+        dateFormatter.format(Date())
+    )
+}
+
+
 

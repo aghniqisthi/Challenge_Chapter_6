@@ -50,7 +50,7 @@ class ViewModelUser(application: Application) : AndroidViewModel(application) {
         return putLDUser
     }
 
-    fun callEditUser(id:Int, name : RequestBody, username :RequestBody, password: RequestBody, age :RequestBody, addr : RequestBody, image: MultipartBody.Part){
+    fun callEditUser(id:Int, name : String, username :String, password: String, age :String, addr : String, image: MultipartBody.Part){
         RetrofitClientUser.instance.putUser(id, name, username, password, addr, age, image).enqueue(object : Callback<List<ResponseDataUserItem>> {
             override fun onResponse(call: Call<List<ResponseDataUserItem>>, response: Response<List<ResponseDataUserItem>>) {
                 if(response.isSuccessful){

@@ -17,10 +17,10 @@ interface RestfulAPIUser {
     @PUT("users/{id}")
     @Multipart
     fun putUser(@Path("id") id:Int,
-                @Part("name") name: RequestBody,
-                @Part("username") username : RequestBody,
-                @Part("password") password : RequestBody,
-                @Part("address") address : RequestBody,
-                @Part("age") age : RequestBody,
+                @Part("name") name: String,
+                @Part("username") username : String,
+                @Part("password") password : String,
+                @Part("address") address : String,
+                @Part("age") age : String,
                 @Part image : MultipartBody.Part) : Call<List<ResponseDataUserItem>>
 }

@@ -4,51 +4,77 @@ import android.app.Application
 import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.work.Data
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
-import com.example.challengechapter6.workers.BlurWorker
-import com.example.challengechapter6.workers.KEY_IMAGE_URI
+import androidx.work.*
+import com.example.challengechapter6.workers.*
 
 class BlurViewModel(application: Application) : ViewModel() {
     //  var untuk instance  WorkManager di ViewModel
-    private val workManager = WorkManager.getInstance(application)
-    private var imageUri: Uri? = null
-
-    init {
-        // This transformation makes sure that whenever the current work Id changes the WorkInfo, UI listens to changes
-        imageUri = getImageUri(application.applicationContext)
+    private val workManager = WorkManager.getInstance(application).also {
+        it.pruneWork()
     }
+    internal var imageUri: Uri? = null
+    internal var outputUri: Uri? = null
+
+    // LiveData for SaveToImageFileWorker's WorkInfo objects to retrieve its status and output Data
+    val outputWorkInfos: LiveData<List<WorkInfo>> = workManager.getWorkInfosByTagLiveData(TAG_OUTPUT)
+
+    // LiveData for BlurWorker's WorkInfo objects to retrieve its status and Progress Data
+    val progressWorkInfos: LiveData<List<WorkInfo>> = workManager.getWorkInfosByTagLiveData(TAG_PROGRESS)
 
     //    make WorkRequest & beritahu WM untuk jalankan
     internal fun applyBlur(blurLevel: Int) {
+        // Create a one-off work request for cleaning any temporary image files
+        val cleanUpRequest = OneTimeWorkRequest.from(CleanupWorker::class.java)
+
         val blurRequest = OneTimeWorkRequestBuilder<BlurWorker>()
-            .setInputData(createInputDataForUri())
+            .setInputData(createInputDataForUri(blurLevel))
             .build()
-        workManager.enqueue(blurRequest)
+
+        // Configure charging constraint and available storage constraint for SaveImageToFileWorker
+        val saveImageToFileConstraints = Constraints.Builder()
+            .setRequiresCharging(true)
+            .setRequiresStorageNotLow(true)
+            .build()
+
+        // Create a one-off work request for saving the blurred image to MediaStore filesystem
+        val saveImageToFileRequest = OneTimeWorkRequestBuilder<SaveImageToFileWorker>()
+            .addTag(TAG_OUTPUT) // Use Tag to get its status and output Data
+            .setConstraints(saveImageToFileConstraints) // Add Constraints to be satisfied for Work
+            .build()
+
+        // Execute clean up first
+        workManager.beginUniqueWork(
+            IMAGE_MANIPULATION_WORK_NAME, // A unique name identifying this chain of work
+            ExistingWorkPolicy.REPLACE, // stop and replace the current work chain if any
+            cleanUpRequest
+        )
+            .then(blurRequest) // then, blur the selected image
+            .then(saveImageToFileRequest) // then, save the blurred image
+            .enqueue() // enqueue and schedule the chain of work in the background thread
+
     }
 
     //create URI img
-    private fun createInputDataForUri(): Data {
-        val builder = Data.Builder()
-        imageUri?.let {
-            builder.putString(KEY_IMAGE_URI, imageUri.toString())
-        }
-        return builder.build()
+    private fun createInputDataForUri(blurLevel: Int): Data = workDataOf(
+        // Uri to the Image to be blurred
+        KEY_IMAGE_URI to imageUri.toString(),
+        // Level of blur to be applied on the Image
+        KEY_BLUR_LEVEL to blurLevel
+    )
+
+    private fun uriOrNull(uriString: String?): Uri? =
+        uriString.takeIf { !it.isNullOrEmpty() }?.let { Uri.parse(it) }
+
+    //setter
+    internal fun setImageUri(uri: String?) {
+        imageUri = uriOrNull(uri)
     }
-
-    //    get image URI
-    private fun getImageUri(context: Context): Uri {
-        val resources = context.resources
-
-        return Uri.Builder()
-            .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
-            .authority(resources.getResourcePackageName(R.id.imageViewProf))
-            .appendPath(resources.getResourceTypeName(R.id.imageViewProf))
-            .appendPath(resources.getResourceEntryName(R.id.imageViewProf))
-            .build()
+    //getter
+    internal fun setOutputUri(outputImageUri: String?) {
+        outputUri = uriOrNull(outputImageUri)
     }
 }
 
