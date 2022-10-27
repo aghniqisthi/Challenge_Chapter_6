@@ -3,7 +3,6 @@ package com.example.challengechapter6.network
 import com.example.challengechapter6.model.ResponseDataUserItem
 import com.example.challengechapter6.model.User
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.*
 

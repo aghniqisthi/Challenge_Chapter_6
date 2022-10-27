@@ -16,6 +16,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
@@ -50,10 +51,9 @@ class ProfileActivity : AppCompatActivity() {
     lateinit var viewModelUser : ViewModelUser
     lateinit var pass:String
     var id by Delegates.notNull<Int>()
+    private var imageUri:Uri? = null
     private var imageMultiPart: MultipartBody.Part? = null
-    private var imageUri: Uri? = Uri.EMPTY
-    private var imageFile: File? = null
-    private val viewModel: BlurViewModel by viewModels { BlurViewModelFactory(application) }
+    private val viewModelBlur : BlurViewModel by viewModels()
 
     companion object {
         const val REQUEST_CODE_IMAGE = 100 // Intent request constant for Picking an Image
@@ -62,24 +62,98 @@ class ProfileActivity : AppCompatActivity() {
         const val MAX_NUMBER_REQUEST_PERMISSIONS = 2 // Constant to limit the number of permission request retries
     }
 
-    // permissions required by the app to access external storage to select an image
-    private val permissions = arrayOf(
-        Manifest.permission.READ_EXTERNAL_STORAGE,
-        Manifest.permission.WRITE_EXTERNAL_STORAGE
-    )
+    private fun checkingPermissions() {
+        if (isGranted(this, Manifest.permission.CAMERA,
+                arrayOf(
+                Manifest.permission.CAMERA,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ), 97,)
+            ) {
+            chooseImageDialog()
+        } else chooseImageDialog()
+    }
 
-    private val galleryResult =
-        registerForActivityResult(ActivityResultContracts.GetContent()) { result ->
-            startActivity(Intent(this, ProfileActivity::class.java).apply {
-                putExtra(KEY_IMAGE_URI, result.toString())
-            })
+    private fun isGranted(activity: Activity, permission: String, permissions: Array<String>, request: Int): Boolean {
+        val permissionCheck = ActivityCompat.checkSelfPermission(activity, permission)
+        return if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)) {
+                showPermissionDeniedDialog()
+            }
+            else ActivityCompat.requestPermissions(activity, permissions, request)
+            false
         }
+        else true
+    }
+
+    private fun showPermissionDeniedDialog() {
+        AlertDialog.Builder(this)
+            .setTitle("Permission Denied")
+            .setMessage("Permission is denied, Please allow permissions from App Settings.")
+            .setPositiveButton("App Settings") {
+                    _, _ -> val intent = Intent()
+                intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                val uri = Uri.fromParts("package", packageName, null)
+                intent.data = uri
+                startActivity(intent)
+            }
+            .setNegativeButton("Cancel") { dialog, _ -> dialog.cancel() }
+            .show()
+    }
+
+    private fun chooseImageDialog() {
+        AlertDialog.Builder(this).setMessage("Pilih Gambar")
+            .setPositiveButton("Gallery") { _, _ -> openGallery() }
+            .setNegativeButton("Camera") { _, _ -> openCamera() }
+            .show()
+    }
+
+    private fun openGallery() {
+        intent.type = "image/*"
+        galleryResult.launch("image/*")
+    }
+
+    //    camera
+    private fun openCamera() {
+        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        cameraResult.launch(cameraIntent)
+    }
+
+    private val cameraResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                handleCameraImage(result.data)
+            }
+        }
+
+    private val galleryResult = registerForActivityResult(ActivityResultContracts.GetContent()) {
+            result -> viewModelBlur.setImageUri(result!!)
+        binding.imageViewProf.setImageURI(result)
+    }
+
+
+    private fun handleCameraImage(intent: Intent?) {
+        val bitmap = intent?.extras?.get("data") as Bitmap
+        binding.imageViewProf.setImageBitmap(bitmap)
+
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        /* //tes firebase
+        val crashButton = Button(this)
+        crashButton.text = "Test Crash"
+        crashButton.setOnClickListener {
+            throw RuntimeException("Test Crash") // Force a crash
+        }
+
+        addContentView(crashButton, ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT)) */
 
         val viewModelUser = ViewModelProvider(this).get(ViewModelUser::class.java)
 
@@ -92,7 +166,7 @@ class ProfileActivity : AppCompatActivity() {
             pass = it.password
         })
 
-        viewModel.outputWorkInfos.observe(this, Observer { workInfos ->
+        viewModelBlur.outputWorkInfos.observe(this, Observer { workInfos ->
             if (!workInfos.isNullOrEmpty()) {
                 // When WorkInfo Objects are generated
                 // Pick the first WorkInfo object. There will be only one WorkInfo object
@@ -106,11 +180,11 @@ class ProfileActivity : AppCompatActivity() {
                     showWorkFinished()
 
                     // Read the final output Image URI string from the WorkInfo's Output Data
-                    workInfo.outputData.getString(KEY_IMAGE_URI)
-                        .takeIf { !it.isNullOrEmpty() }?.let { outputUriStr ->
+                    workInfo.outputData.let{ outputUriStr ->
                             // When we have the final Image URI
                             // Save the final Image URI string in the ViewModel
-                            viewModel.setOutputUri(outputUriStr)
+                        Toast.makeText(this, "outputuristr: ${outputUriStr}", Toast.LENGTH_SHORT).show()
+                            viewModelBlur.setOutputUri(outputUriStr.toString())
                         }
                 }
                 else {
@@ -120,7 +194,7 @@ class ProfileActivity : AppCompatActivity() {
             }
         })
 
-        viewModel.progressWorkInfos.observe(this, Observer { workInfos ->
+        viewModelBlur.progressWorkInfos.observe(this, Observer { workInfos ->
             if (!workInfos.isNullOrEmpty()) {
                 // When WorkInfo Objects are generated
 
@@ -135,27 +209,28 @@ class ProfileActivity : AppCompatActivity() {
             }
         })
 
+        //nampilin gambar sebelum diblur
         binding.imageViewProf.setOnClickListener {
-            // Make sure the app has correct permissions to run
-            requestPermissionsIfNecessary()
+            checkingPermissions()
+        }
 
-            // When activity is reloaded after configuration change
-            savedInstanceState?.let {
-                // Restore the permission request count
-                permissionRequestCount = it.getInt(KEY_PERMISSIONS_REQUEST_COUNT, 0)
+        //ngeblur + nampilin gambar setelah diblur
+        binding.btnBlur.setOnClickListener {
+            // Load the Image picked
+            viewModelBlur.imageUri?.let { imageUri ->
+                Glide.with(this).load(imageUri).into(binding.imageViewProf)
             }
-            intent.type = "image/*"
-            galleryResult.launch("image/*")
 
-            // Image URI should be stored in the ViewModel; put it there then display
-            val imageUriExtra = intent.getStringExtra(KEY_IMAGE_URI)
-            viewModel.setImageUri(imageUriExtra)
-
-            viewModel.imageUri.let { imageUri ->
-                viewModel.applyBlur(3)
-                Glide.with(this).load(imageUriExtra).into(binding.imageViewProf)
-                Toast.makeText(this, "imageuriexttra: $imageUriExtra", Toast.LENGTH_SHORT).show()
-            }
+            viewModelBlur.applyBlur(3)
+            Toast.makeText(this, "blur end", Toast.LENGTH_SHORT).show()
+//            // Create an Intent to view the Image pointed to by the Output URI saved in the ViewModel
+//            Intent(Intent.ACTION_GET_CONTENT, viewModel.outputUri).let { actionViewIntent ->
+//                // Check if there is any activity to handle this Intent
+//                actionViewIntent.resolveActivity(packageManager)?.run {
+//                    // When we have found an activity, start the activity with the Intent
+//                    startActivity(actionViewIntent)
+//                }
+//            }
         }
 
         binding.btnUpdate.setOnClickListener {
@@ -189,46 +264,6 @@ class ProfileActivity : AppCompatActivity() {
 
     private fun showWorkFinished() {
         binding.progressbar.visibility = View.GONE
-    }
-
-    private fun requestPermissionsIfNecessary() {
-        // Check if all required permissions are granted
-        if (!checkAllPermissions()) {
-            // When all required permissions are not granted yet
-
-            if (permissionRequestCount < MAX_NUMBER_REQUEST_PERMISSIONS) {
-                // When the number of permission request retried is less than the max limit set
-                permissionRequestCount += 1 // Increment the number of permission requests done
-                // Request the required permissions for external storage access
-                ActivityCompat.requestPermissions(this, permissions, REQUEST_CODE_PERMISSIONS)
-            } else {
-                // Disable the "Select Image" button when access is denied by the user
-                binding.imageViewProf.isEnabled = false
-            }
-        }
-    }
-
-    private fun checkAllPermissions(): Boolean {
-        // Boolean state to indicate all permissions are granted
-        var hasPermissions = true
-        // Verify all permissions are granted
-        for (permission in permissions) {
-            hasPermissions = hasPermissions and isPermissionGranted(permission)
-        }
-        // Return the state of all permissions granted
-        return hasPermissions
-    }
-
-    private fun isPermissionGranted(permission: String) = ContextCompat.checkSelfPermission(this, permission) ==
-            PackageManager.PERMISSION_GRANTED
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        when (requestCode) {
-            // For External Storage access permission request
-            REQUEST_CODE_PERMISSIONS -> requestPermissionsIfNecessary() // no-op if permissions are granted already.
-            // For other requests, delegate to super
-            else -> super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

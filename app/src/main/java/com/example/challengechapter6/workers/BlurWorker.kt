@@ -1,13 +1,16 @@
 package com.example.challengechapter6.workers
 
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.text.TextUtils
 import android.util.Log
+import android.widget.Toast
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
+import com.example.challengechapter6.view.ProfileActivity
 
 class BlurWorker(context : Context, params : WorkerParameters): Worker(context, params) {
     override fun doWork(): Result {
@@ -24,17 +27,18 @@ class BlurWorker(context : Context, params : WorkerParameters): Worker(context, 
                 throw IllegalArgumentException("Invalid input uri")
             }
 
-            // buat bitmap dari gambar (decodeSource), picture yang nantinya akan diteruskan
+            Toast.makeText(applicationContext, "masuk try blur", Toast.LENGTH_SHORT).show()
+//            buat bitmap dari gambar (decodeSource), picture yang nantinya akan diteruskan
             val resolver = appContext.contentResolver
             val picture = BitmapFactory.decodeStream(resolver.openInputStream(Uri.parse(resourceUri)))
 
-            // blur image - get versi blur bitmap
+//            nge blurin image - get versi blur bitmap
             val output = blurBitmap(picture, appContext)
 
             // Write bitmap to a temp file
             val outputUri = writeBitmapToFile(appContext, output)
 
-            // buat output URI sementara agar dapat diakses untuk proses selanjutnya
+//            buat output URI sementara, agar dapat diakses untuk proses selanjutnya
             val outputData = workDataOf(KEY_IMAGE_URI to outputUri.toString())
             Result.success(outputData)
         }
@@ -44,5 +48,4 @@ class BlurWorker(context : Context, params : WorkerParameters): Worker(context, 
             Result.failure()
         }
     }
-
 }

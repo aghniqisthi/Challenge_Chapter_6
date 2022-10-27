@@ -5,6 +5,11 @@ plugins {
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
 
+    // Add the Google services Gradle plugin
+    id 'com.google.gms.google-services'
+
+    id 'com.google.firebase.crashlytics'
+
     //proto
     id "com.google.protobuf" version "0.8.17"
 }
@@ -92,6 +97,35 @@ dependencies {
     implementation  "com.google.protobuf:protobuf-javalite:3.18.0"
     implementation("androidx.datastore:datastore:1.0.0")
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
+
+        // Import the Firebase BoM
+        implementation platform('com.google.firebase:firebase-bom:31.0.1')
+
+     // When using the BoM, don't specify versions in Firebase dependencies
+        implementation 'com.google.firebase:firebase-analytics-ktx'
+
+    // Import the BoM for the Firebase platform
+    implementation platform('com.google.firebase:firebase-bom:31.0.1')
+
+    // Add the dependencies for the Crashlytics and Analytics libraries
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation 'com.google.firebase:firebase-crashlytics-ktx'
+
+    // Add the dependencies for any other desired Firebase products
+    // https://firebase.google.com/docs/android/setup#available-libraries
+
+    // Import the BoM for the Firebase platform
+    implementation platform('com.google.firebase:firebase-bom:30.5.0')
+    implementation 'com.google.firebase:firebase-auth:20.0.0'
+
+    // Add the dependency for the Firebase Authentication library
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation 'com.google.firebase:firebase-auth-ktx'
+
+    // Also add the dependency for the Google Play services library and specify its version
+    implementation 'com.google.android.gms:play-services-auth:20.3.0'
+
+
 }
 
 //proto datastore protobuf

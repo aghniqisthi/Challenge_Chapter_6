@@ -1,14 +1,10 @@
 package com.example.challengechapter6.viewmodel
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.example.challengechapter6.model.*
-import com.example.challengechapter6.network.RestfulAPICart
-import com.example.challengechapter6.network.RestfulAPIProduct
-import com.example.challengechapter6.network.RetrofitClientCart
-import com.example.challengechapter6.network.RetrofitClientUser
+import com.example.challengechapter6.network.*
+import com.example.challengechapter6.view.HomeActivity
 import com.example.challengechapter6.view.LoginActivity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.GlobalScope
@@ -28,7 +24,9 @@ class ViewModelCart (application: Application) : AndroidViewModel(application){
         liveDataCart = MutableLiveData()
         postLDCart = MutableLiveData()
         deleteCart = MutableLiveData()
-        callApiCart()
+        var viewModelUser = ViewModelProvider(HomeActivity()).get(ViewModelUser::class.java)
+
+        callApiCart(viewModelUser.dataUser.value!!.id)
     }
 
     fun getLDCart() : MutableLiveData<List<ResponseDataCartItem>> {
@@ -41,8 +39,8 @@ class ViewModelCart (application: Application) : AndroidViewModel(application){
         return deleteCart
     }
 
-    fun callApiCart(){
-        RetrofitClientCart.instance.getAllCart().enqueue(object :
+    fun callApiCart(iduser:Int){
+        RetrofitClientCart.instance.getAllCart(iduser).enqueue(object :
             Callback<List<ResponseDataCartItem>> {
             override fun onResponse(call: Call<List<ResponseDataCartItem>>, response: Response<List<ResponseDataCartItem>>) {
                 if (response.isSuccessful){
@@ -58,8 +56,8 @@ class ViewModelCart (application: Application) : AndroidViewModel(application){
         })
     }
 
-    fun callPostApiCart(name: String, price:String, description:String, imageLink:String, hexValue:String){
-        RetrofitClientCart.instance.addCart(Cart(name, price, description, imageLink, hexValue)).enqueue(object :
+    fun callPostApiCart(id:Int, name: String, price:String, description:String, imageLink:String, hexValue:String){
+        RetrofitClientCart.instance.addCart(id, Cart(name, price, description, imageLink, hexValue)).enqueue(object :
             Callback<ResponseDataCartItem> {
             override fun onResponse(call: Call<ResponseDataCartItem>, response: Response<ResponseDataCartItem>) {
                 if(response.isSuccessful) postLDCart.postValue(response.body())
@@ -71,16 +69,16 @@ class ViewModelCart (application: Application) : AndroidViewModel(application){
         })
     }
 
-    fun callDeleteCart(id: Int) {
-        RetrofitClientCart.instance.deleteCart(id).enqueue(object : Callback<Int> {
+    fun callDeleteCart(idu:Int, idc: Int) {
+        RetrofitClientCart.instance.deleteCart(idu, idc).enqueue(object : Callback<Int> {
             override fun onResponse(call: Call<Int>, response: Response<Int>) {
                 if (response.isSuccessful) {
                     deleteCart.postValue(response.body())
                 }
-                callApiCart()
+                callApiCart(idu)
             }
             override fun onFailure(call: Call<Int>, t: Throwable) {
-                callApiCart()
+                callApiCart(idu)
             }
         })
     }

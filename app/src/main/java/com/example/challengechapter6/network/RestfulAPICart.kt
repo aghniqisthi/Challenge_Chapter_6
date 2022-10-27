@@ -6,12 +6,12 @@ import retrofit2.Call
 import retrofit2.http.*
 
 interface RestfulAPICart {
-    @GET("cart")
-    fun getAllCart() : Call<List<ResponseDataCartItem>>
+    @GET("users/{idu}/cart")
+    fun getAllCart(@Path("idu") idu : Int) : Call<List<ResponseDataCartItem>>
 
-    @POST("cart")
-    fun addCart(@Body request : Cart) : Call<ResponseDataCartItem>
+    @POST("users/{idu}/cart")
+    fun addCart(@Path("idu") idu : Int, @Body request : Cart) : Call<ResponseDataCartItem>
 
-    @DELETE("cart/{id}")
-    fun deleteCart(@Path("id") id : Int) : Call<Int>
+    @DELETE("users/{idu}/cart/{idc}")
+    fun deleteCart(@Path("idu") idu : Int, @Path("idc") idc : Int) : Call<Int>
 }

@@ -11,7 +11,7 @@ data class ResponseDataUserItem(
     @SerializedName("id")
     val id: String,
     @SerializedName("image")
-    val image: Int,
+    val image: String,
     @SerializedName("name")
     val name: String,
     @SerializedName("password")

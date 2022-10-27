@@ -18,15 +18,18 @@ class CartActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityCartBinding
     lateinit var viewModelCart: ViewModelCart
+    lateinit var viewModelUser:ViewModelUser
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCartBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        viewModelUser = ViewModelProvider(this).get(com.example.challengechapter6.model.ViewModelUser::class.java)
         viewModelCart = ViewModelProvider(this).get(ViewModelCart::class.java)
 
-        showData()
+        showData(viewModelUser.dataUser.value!!.id)
 
         binding.txtBackFav.setOnClickListener {
             val pindah = Intent(this, HomeActivity::class.java)
@@ -34,7 +37,7 @@ class CartActivity : AppCompatActivity() {
         }
     }
 
-    fun showData(){
+    fun showData(idu:Int){
         viewModelCart.getLDCart().observe(this, Observer {
             if (it != null) {
                 binding.rvCart.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
@@ -43,6 +46,6 @@ class CartActivity : AppCompatActivity() {
                 Toast.makeText(this, "There is no data to show", Toast.LENGTH_SHORT).show()
             }
         })
-        viewModelCart.callApiCart()
+        viewModelCart.callApiCart(idu)
     }
 }

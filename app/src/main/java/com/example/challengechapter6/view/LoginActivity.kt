@@ -56,8 +56,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     fun requestLogin(username:String, password:String){
-        RetrofitClientUser.instance.getAllUser().enqueue(object :
-            Callback<List<ResponseDataUserItem>> {
+        RetrofitClientUser.instance.getAllUser().enqueue(object : Callback<List<ResponseDataUserItem>> {
             override fun onResponse(call: Call<List<ResponseDataUserItem>>, response: Response<List<ResponseDataUserItem>>) {
                 var data = false
                 if(response.isSuccessful){
@@ -85,7 +84,6 @@ class LoginActivity : AppCompatActivity() {
             override fun onFailure(call: Call<List<ResponseDataUserItem>>, t: Throwable) {
 
             }
-
         })
     }
 }

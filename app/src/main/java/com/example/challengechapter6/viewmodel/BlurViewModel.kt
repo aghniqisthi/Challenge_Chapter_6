@@ -4,19 +4,22 @@ import android.app.Application
 import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
+import android.widget.Toast
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.work.*
+import com.example.challengechapter6.view.ProfileActivity
 import com.example.challengechapter6.workers.*
 
-class BlurViewModel(application: Application) : ViewModel() {
+class BlurViewModel(application: Application) : AndroidViewModel(application) {
     //  var untuk instance  WorkManager di ViewModel
     private val workManager = WorkManager.getInstance(application).also {
         it.pruneWork()
     }
-    internal var imageUri: Uri? = null
-    internal var outputUri: Uri? = null
+    lateinit var imageUri: Uri
+    lateinit var outputUri: String
 
     // LiveData for SaveToImageFileWorker's WorkInfo objects to retrieve its status and output Data
     val outputWorkInfos: LiveData<List<WorkInfo>> = workManager.getWorkInfosByTagLiveData(TAG_OUTPUT)
@@ -54,7 +57,6 @@ class BlurViewModel(application: Application) : ViewModel() {
             .then(blurRequest) // then, blur the selected image
             .then(saveImageToFileRequest) // then, save the blurred image
             .enqueue() // enqueue and schedule the chain of work in the background thread
-
     }
 
     //create URI img
@@ -65,16 +67,13 @@ class BlurViewModel(application: Application) : ViewModel() {
         KEY_BLUR_LEVEL to blurLevel
     )
 
-    private fun uriOrNull(uriString: String?): Uri? =
-        uriString.takeIf { !it.isNullOrEmpty() }?.let { Uri.parse(it) }
-
     //setter
-    internal fun setImageUri(uri: String?) {
-        imageUri = uriOrNull(uri)
+    internal fun setImageUri(uri: Uri) {
+        imageUri = uri
     }
     //getter
-    internal fun setOutputUri(outputImageUri: String?) {
-        outputUri = uriOrNull(outputImageUri)
+    internal fun setOutputUri(outputImageUri: String) {
+        outputUri = outputImageUri
     }
 }
 

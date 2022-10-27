@@ -15,6 +15,7 @@ import com.example.challengechapter6.databinding.ActivityDetailProductBinding
 import com.example.challengechapter6.model.Cart
 import com.example.challengechapter6.model.ResponseDataCartItem
 import com.example.challengechapter6.model.ResponseDataProductItem
+import com.example.challengechapter6.model.ViewModelUser
 import com.example.challengechapter6.viewmodel.ViewModelCart
 
 class DetailFavoritActivity : AppCompatActivity() {
@@ -45,7 +46,9 @@ class DetailFavoritActivity : AppCompatActivity() {
 
         binding.btnRemoveCart.setOnClickListener {
             var viewModel = ViewModelProvider(this).get(ViewModelCart::class.java)
-            viewModel.callDeleteCart(dataCart.id.toInt())
+            var viewModelUser = ViewModelProvider(this).get(ViewModelUser::class.java)
+
+            viewModel.callDeleteCart(viewModelUser.dataUser.value!!.id, dataCart.id.toInt())
             Toast.makeText(this, "${dataCart.name} removed from Cart!", Toast.LENGTH_SHORT).show()
             val pindah = Intent(this, CartActivity::class.java)
             startActivity(pindah)

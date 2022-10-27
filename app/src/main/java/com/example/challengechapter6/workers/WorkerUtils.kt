@@ -61,6 +61,37 @@ fun blurBitmap(bitmap: Bitmap, applicationContext: Context): Bitmap {
     }
 }
 
+private fun doBlurBitmap(rsContext: RenderScript,
+                         scriptIntrinsicBlur: ScriptIntrinsicBlur,
+                         bitmapToBlur: Bitmap): Bitmap {
+    // Create the output bitmap that will hold the blurred image
+    val blurredBitmap = bitmapToBlur.copy(bitmapToBlur.config, true)
+
+    // Create Allocations for Renderscript to run
+    val inAlloc = Allocation.createFromBitmap(rsContext, bitmapToBlur)
+    val outAlloc = Allocation.createTyped(rsContext, inAlloc.type)
+
+    scriptIntrinsicBlur.apply {
+        // Set the Allocation input for the Blur script
+        scriptIntrinsicBlur.setInput(inAlloc)
+        // Execute the Blur process
+        scriptIntrinsicBlur.forEach(outAlloc)
+    }
+
+    // Copy the result to the output bitmap
+    outAlloc.copyTo(blurredBitmap)
+
+    // Recycle the "bitmapToBlur" as we are returning a new one
+    bitmapToBlur.recycle()
+
+    // Release resources held by allocations only
+    inAlloc.destroy()
+    outAlloc.destroy()
+
+    // Return the blurred bitmap
+    return blurredBitmap
+}
+
 fun writeBitmapToFile(applicationContext: Context, bitmap: Bitmap): Uri {
     val name = String.format("blur-filter-output-%s.png", UUID.randomUUID().toString())
     val outputDir = File(applicationContext.filesDir, OUTPUT_PATH)
