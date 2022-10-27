@@ -49,8 +49,8 @@ class ProfileActivity : AppCompatActivity() {
     lateinit var binding : ActivityProfileBinding
     private var permissionRequestCount: Int = 0
     lateinit var viewModelUser : ViewModelUser
-    lateinit var pass:String
     var id by Delegates.notNull<Int>()
+    lateinit var password : String
     private var imageUri:Uri? = null
     private var imageMultiPart: MultipartBody.Part? = null
     private val viewModelBlur : BlurViewModel by viewModels()
@@ -162,8 +162,8 @@ class ProfileActivity : AppCompatActivity() {
             binding.editNamaProf.setText(it.name)
             binding.editAgeProf.setText(it.age.toString())
             binding.editAddressProf.setText(it.address)
+            password = it.password
             id = it.id
-            pass = it.password
         })
 
         viewModelBlur.outputWorkInfos.observe(this, Observer { workInfos ->
@@ -183,9 +183,8 @@ class ProfileActivity : AppCompatActivity() {
                     workInfo.outputData.let{ outputUriStr ->
                             // When we have the final Image URI
                             // Save the final Image URI string in the ViewModel
-                        Toast.makeText(this, "outputuristr: ${outputUriStr}", Toast.LENGTH_SHORT).show()
                             viewModelBlur.setOutputUri(outputUriStr.toString())
-                        }
+                    }
                 }
                 else {
                     // In other cases, show and hide the appropriate views for the same
@@ -220,23 +219,16 @@ class ProfileActivity : AppCompatActivity() {
             viewModelBlur.imageUri?.let { imageUri ->
                 Glide.with(this).load(imageUri).into(binding.imageViewProf)
             }
-
             viewModelBlur.applyBlur(3)
-            Toast.makeText(this, "blur end", Toast.LENGTH_SHORT).show()
-//            // Create an Intent to view the Image pointed to by the Output URI saved in the ViewModel
-//            Intent(Intent.ACTION_GET_CONTENT, viewModel.outputUri).let { actionViewIntent ->
-//                // Check if there is any activity to handle this Intent
-//                actionViewIntent.resolveActivity(packageManager)?.run {
-//                    // When we have found an activity, start the activity with the Intent
-//                    startActivity(actionViewIntent)
-//                }
-//            }
+
+            val chooseIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            // Start the activity for picking an Image
+            startActivityForResult(chooseIntent, REQUEST_CODE_IMAGE)
         }
 
         binding.btnUpdate.setOnClickListener {
             val name = binding.editNamaProf.text.toString()
             val username = binding.editUsernameProf.text.toString()
-            val passwd = pass
             val address = binding.editAddressProf.text.toString()
             val age = binding.editAgeProf.text.toString()
 
@@ -245,7 +237,9 @@ class ProfileActivity : AppCompatActivity() {
                     Toast.makeText(this, "Edit Data Success!", Toast.LENGTH_SHORT).show()
                 }
             })
-            viewModelUser.callEditUser(id,name,username,passwd,age,address, imageMultiPart!!)
+            viewModelUser.callEditUser(id,name,username,age.toInt(),address, imageUri)
+            //add ke datastore
+            viewModelUser.editData(id, name, username, password, address, age.toInt())
 
             val pindah = Intent(this, HomeActivity::class.java)
             startActivity(pindah)

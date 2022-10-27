@@ -4,17 +4,11 @@ import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
-import com.example.challengechapter6.R
 import com.example.challengechapter6.databinding.ActivityDetailFavoritBinding
-import com.example.challengechapter6.databinding.ActivityDetailProductBinding
-import com.example.challengechapter6.model.Cart
 import com.example.challengechapter6.model.ResponseDataCartItem
-import com.example.challengechapter6.model.ResponseDataProductItem
 import com.example.challengechapter6.model.ViewModelUser
 import com.example.challengechapter6.viewmodel.ViewModelCart
 
@@ -48,7 +42,10 @@ class DetailFavoritActivity : AppCompatActivity() {
             var viewModel = ViewModelProvider(this).get(ViewModelCart::class.java)
             var viewModelUser = ViewModelProvider(this).get(ViewModelUser::class.java)
 
-            viewModel.callDeleteCart(viewModelUser.dataUser.value!!.id, dataCart.id.toInt())
+            viewModelUser.dataUser.observe(this, {
+                viewModel.callDeleteCart(it.id, dataCart.id.toInt())
+            })
+
             Toast.makeText(this, "${dataCart.name} removed from Cart!", Toast.LENGTH_SHORT).show()
             val pindah = Intent(this, CartActivity::class.java)
             startActivity(pindah)

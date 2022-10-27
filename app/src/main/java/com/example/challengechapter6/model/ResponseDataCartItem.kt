@@ -16,5 +16,7 @@ data class ResponseDataCartItem(
     @SerializedName("name")
     val name: String,
     @SerializedName("price")
-    val price: String
+    val price: String,
+    @SerializedName("userId")
+    val userId: String
 ) : Serializable

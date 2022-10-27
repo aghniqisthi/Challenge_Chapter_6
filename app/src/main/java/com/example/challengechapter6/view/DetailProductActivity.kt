@@ -55,7 +55,9 @@ class DetailProductActivity : AppCompatActivity() {
         var viewModel = ViewModelProvider(this).get(ViewModelCart::class.java)
         var viewModelUser = ViewModelProvider(this).get(ViewModelUser::class.java)
 
-        viewModel.callPostApiCart(viewModelUser.dataUser.value!!.id, name, price, description, imageLink, hexValue)
+        viewModelUser.dataUser.observe(this, {
+            viewModel.callPostApiCart(it.id, name, price, description, imageLink, hexValue)
+        })
         viewModel.addLiveDataCart().observe(this, {
             if(it!=null){
                 Toast.makeText(this, "Cart Added!", Toast.LENGTH_SHORT).show()

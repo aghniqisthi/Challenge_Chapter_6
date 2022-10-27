@@ -24,9 +24,6 @@ class ViewModelCart (application: Application) : AndroidViewModel(application){
         liveDataCart = MutableLiveData()
         postLDCart = MutableLiveData()
         deleteCart = MutableLiveData()
-        var viewModelUser = ViewModelProvider(HomeActivity()).get(ViewModelUser::class.java)
-
-        callApiCart(viewModelUser.dataUser.value!!.id)
     }
 
     fun getLDCart() : MutableLiveData<List<ResponseDataCartItem>> {

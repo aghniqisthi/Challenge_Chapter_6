@@ -1,5 +1,7 @@
 package com.example.challengechapter6.network
 
+import android.net.Uri
+import com.example.challengechapter6.model.EditUser
 import com.example.challengechapter6.model.ResponseDataUserItem
 import com.example.challengechapter6.model.User
 import okhttp3.MultipartBody
@@ -14,12 +16,6 @@ interface RestfulAPIUser {
     fun addUser(@Body request : User) : Call<ResponseDataUserItem>
 
     @PUT("users/{id}")
-    @Multipart
     fun putUser(@Path("id") id:Int,
-                @Part("name") name: String,
-                @Part("username") username : String,
-                @Part("password") password : String,
-                @Part("address") address : String,
-                @Part("age") age : String,
-                @Part image : MultipartBody.Part) : Call<List<ResponseDataUserItem>>
+                @Body request: EditUser) : Call<List<ResponseDataUserItem>>
 }

@@ -1,6 +1,7 @@
 package com.example.challengechapter6.model
 
 import android.app.Application
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.challengechapter6.datastore.UserPreferencesRepository
@@ -50,8 +51,8 @@ class ViewModelUser(application: Application) : AndroidViewModel(application) {
         return putLDUser
     }
 
-    fun callEditUser(id:Int, name : String, username :String, password: String, age :String, addr : String, image: MultipartBody.Part){
-        RetrofitClientUser.instance.putUser(id, name, username, password, addr, age, image).enqueue(object : Callback<List<ResponseDataUserItem>> {
+    fun callEditUser(id:Int, name : String, username :String, age :Int, addr : String, image: Uri?){
+        RetrofitClientUser.instance.putUser(id, EditUser(name, username, addr, age, image)).enqueue(object : Callback<List<ResponseDataUserItem>> {
             override fun onResponse(call: Call<List<ResponseDataUserItem>>, response: Response<List<ResponseDataUserItem>>) {
                 if(response.isSuccessful){
                     putLDUser.postValue(response.body())

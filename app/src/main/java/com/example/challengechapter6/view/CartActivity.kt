@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.challengechapter6.adapter.CartAdapter
 import com.example.challengechapter6.adapter.ProductAdapter
@@ -18,7 +19,7 @@ class CartActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityCartBinding
     lateinit var viewModelCart: ViewModelCart
-    lateinit var viewModelUser:ViewModelUser
+    lateinit var viewModelUser: ViewModelUser
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,10 +27,12 @@ class CartActivity : AppCompatActivity() {
         binding = ActivityCartBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModelUser = ViewModelProvider(this).get(com.example.challengechapter6.model.ViewModelUser::class.java)
+        viewModelUser = ViewModelProvider(this).get(ViewModelUser::class.java)
         viewModelCart = ViewModelProvider(this).get(ViewModelCart::class.java)
 
-        showData(viewModelUser.dataUser.value!!.id)
+        viewModelUser.dataUser.observe(this, {
+            showData(it.id)
+        })
 
         binding.txtBackFav.setOnClickListener {
             val pindah = Intent(this, HomeActivity::class.java)
