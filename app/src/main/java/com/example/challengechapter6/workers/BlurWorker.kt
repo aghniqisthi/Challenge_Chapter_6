@@ -27,7 +27,6 @@ class BlurWorker(context : Context, params : WorkerParameters): Worker(context, 
                 throw IllegalArgumentException("Invalid input uri")
             }
 
-            //Toast.makeText(applicationContext, "masuk try blur", Toast.LENGTH_SHORT).show()
 //            buat bitmap dari gambar (decodeSource), picture yang nantinya akan diteruskan
             val resolver = appContext.contentResolver
             val picture = BitmapFactory.decodeStream(resolver.openInputStream(Uri.parse(resourceUri)))

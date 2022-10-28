@@ -127,7 +127,7 @@ class ProfileActivity : AppCompatActivity() {
         }
 
     private val galleryResult = registerForActivityResult(ActivityResultContracts.GetContent()) {
-            result -> viewModelBlur.setImageUri(result!!)
+            result -> viewModelBlur.setImageUri(result.toString())
         binding.imageViewProf.setImageURI(result)
     }
 

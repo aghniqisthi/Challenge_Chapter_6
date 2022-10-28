@@ -18,7 +18,7 @@ class BlurViewModel(application: Application) : AndroidViewModel(application) {
     private val workManager = WorkManager.getInstance(application).also {
         it.pruneWork()
     }
-    lateinit var imageUri: Uri
+    lateinit var imageUri: String
     lateinit var outputUri: String
 
     // LiveData for SaveToImageFileWorker's WorkInfo objects to retrieve its status and output Data
@@ -62,13 +62,13 @@ class BlurViewModel(application: Application) : AndroidViewModel(application) {
     //create URI img
     private fun createInputDataForUri(blurLevel: Int): Data = workDataOf(
         // Uri to the Image to be blurred
-        KEY_IMAGE_URI to imageUri.toString(),
+        KEY_IMAGE_URI to imageUri,
         // Level of blur to be applied on the Image
         KEY_BLUR_LEVEL to blurLevel
     )
 
     //setter
-    internal fun setImageUri(uri: Uri) {
+    internal fun setImageUri(uri: String) {
         imageUri = uri
     }
     //getter
