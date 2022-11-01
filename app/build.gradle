@@ -125,7 +125,6 @@ dependencies {
     // Also add the dependency for the Google Play services library and specify its version
     implementation 'com.google.android.gms:play-services-auth:20.3.0'
 
-
 }
 
 //proto datastore protobuf
@@ -134,9 +133,8 @@ protobuf {
         artifact = "com.google.protobuf:protoc:3.14.0"
     }
 
-    // Generates the java Protobuf-lite code for the Protobufs in this project. See
-    // https://github.com/google/protobuf-gradle-plugin#customizing-protobuf-compilation
-    // for more information.
+    // Generates the java Protobuf-lite code for the Protobufs in this project.
+    // https://github.com/google/protobuf-gradle-plugin#customizing-protobuf-compilation for more information.
     generateProtoTasks {
         all().each { task ->
             task.builtins {

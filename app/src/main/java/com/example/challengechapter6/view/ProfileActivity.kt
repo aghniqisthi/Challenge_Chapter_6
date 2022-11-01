@@ -36,6 +36,8 @@ import com.example.challengechapter6.model.ViewModelUser
 import com.example.challengechapter6.workers.KEY_IMAGE_URI
 import com.example.challengechapter6.workers.KEY_PROGRESS
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -247,6 +249,7 @@ class ProfileActivity : AppCompatActivity() {
 
         binding.btnLogout.setOnClickListener {
             viewModelUser.clearData()
+            Firebase.auth.signOut()
             var pinda = Intent(this, LoginActivity::class.java)
             startActivity(pinda)
         }

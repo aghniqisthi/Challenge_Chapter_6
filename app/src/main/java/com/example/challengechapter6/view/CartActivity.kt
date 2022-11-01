@@ -43,6 +43,7 @@ class CartActivity : AppCompatActivity() {
     fun showData(idu:Int){
         viewModelCart.getLDCart().observe(this, Observer {
             if (it != null) {
+                //https://docs.google.com/document/d/1xPU5EzUy6r0TOk5D_19oKt2Wn75-aeen/edit
                 binding.rvCart.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
                 binding.rvCart.adapter = CartAdapter(it)
             } else {

@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide
 import com.example.challengechapter6.R
 import com.example.challengechapter6.databinding.ActivitySplashBinding
 import com.example.challengechapter6.model.ViewModelUser
+import com.google.android.gms.auth.api.signin.GoogleSignIn
 import dagger.hilt.android.AndroidEntryPoint
 
 class SplashActivity : AppCompatActivity() {
@@ -44,6 +45,13 @@ class SplashActivity : AppCompatActivity() {
 
         viewModelUser.dataUser.observe(this, Observer {
             if(it.username != "" && it.username != null){
+                Handler().postDelayed({
+                    val intent = Intent(this, HomeActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }, 5000)
+            }
+            else if(GoogleSignIn.getLastSignedInAccount(this)!=null){
                 Handler().postDelayed({
                     val intent = Intent(this, HomeActivity::class.java)
                     startActivity(intent)
