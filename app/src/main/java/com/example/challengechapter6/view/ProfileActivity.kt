@@ -2,8 +2,6 @@ package com.example.challengechapter6.view
 
 import android.Manifest
 import android.app.Activity
-import android.content.ContentResolver
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -12,38 +10,28 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.provider.Settings
-import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.Button
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.work.WorkInfo
 import com.bumptech.glide.Glide
-import com.example.challengechapter6.BlurViewModel
-import com.example.challengechapter6.BlurViewModelFactory
+import com.example.challengechapter6.viewmodel.BlurViewModel
 import com.example.challengechapter6.R
 import com.example.challengechapter6.databinding.ActivityProfileBinding
-import com.example.challengechapter6.model.ViewModelUser
-import com.example.challengechapter6.workers.KEY_IMAGE_URI
+import com.example.challengechapter6.viewmodel.ViewModelUser
 import com.example.challengechapter6.workers.KEY_PROGRESS
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.asRequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
-import java.io.File
 import kotlin.properties.Delegates
 
 class ProfileActivity : AppCompatActivity() {
@@ -52,6 +40,10 @@ class ProfileActivity : AppCompatActivity() {
     private var permissionRequestCount: Int = 0
     lateinit var viewModelUser : ViewModelUser
     var id by Delegates.notNull<Int>()
+
+    lateinit var mGoogleSignInClient: GoogleSignInClient
+    private lateinit var firebaseAuth: FirebaseAuth
+
     lateinit var password : String
     private var imageUri:Uri? = null
     private var imageMultiPart: MultipartBody.Part? = null
@@ -157,6 +149,14 @@ class ProfileActivity : AppCompatActivity() {
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.WRAP_CONTENT)) */
 
+        firebaseAuth = FirebaseAuth.getInstance()
+
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
+
         val viewModelUser = ViewModelProvider(this).get(ViewModelUser::class.java)
 
         viewModelUser.dataUser.observe(this, Observer {
@@ -250,6 +250,10 @@ class ProfileActivity : AppCompatActivity() {
         binding.btnLogout.setOnClickListener {
             viewModelUser.clearData()
             Firebase.auth.signOut()
+            mGoogleSignInClient.signOut().addOnCompleteListener {
+                var pinda = Intent(this, LoginActivity::class.java)
+                startActivity(pinda)
+            }
             var pinda = Intent(this, LoginActivity::class.java)
             startActivity(pinda)
         }

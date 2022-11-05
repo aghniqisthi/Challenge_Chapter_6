@@ -9,11 +9,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.challengechapter6.adapter.CartAdapter
-import com.example.challengechapter6.adapter.ProductAdapter
 import com.example.challengechapter6.databinding.ActivityCartBinding
-import com.example.challengechapter6.model.ViewModelUser
+import com.example.challengechapter6.viewmodel.ViewModelUser
 import com.example.challengechapter6.viewmodel.ViewModelCart
-import com.example.challengechapter6.viewmodel.ViewModelProduct
 
 class CartActivity : AppCompatActivity() {
 
@@ -45,7 +43,8 @@ class CartActivity : AppCompatActivity() {
             if (it != null) {
                 //https://docs.google.com/document/d/1xPU5EzUy6r0TOk5D_19oKt2Wn75-aeen/edit
                 binding.rvCart.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-                binding.rvCart.adapter = CartAdapter(it)
+                binding.rvCart.adapter =
+                    CartAdapter(it)
             } else {
                 Toast.makeText(this, "There is no data to show", Toast.LENGTH_SHORT).show()
             }

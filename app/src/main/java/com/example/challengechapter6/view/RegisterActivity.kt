@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.example.challengechapter6.databinding.ActivityRegisterBinding
-import com.example.challengechapter6.model.ViewModelUser
+import com.example.challengechapter6.viewmodel.ViewModelUser
 
 class RegisterActivity : AppCompatActivity() {
 

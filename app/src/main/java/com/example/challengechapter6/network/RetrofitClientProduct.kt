@@ -27,7 +27,9 @@ object RetrofitClientProduct {
 
     @Singleton
     @Provides
-    fun provideRetrofit() : Retrofit= Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(GsonConverterFactory.create()).client(client).build()
+    fun provideRetrofit() : Retrofit= Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(GsonConverterFactory.create()).client(
+        client
+    ).build()
 
     @Singleton
     @Provides

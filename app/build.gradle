@@ -27,7 +27,26 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+//    flavorDimensions("makeup")
+//    productFlavors{
+//        maybelline{
+//            applicationIdSuffix ".maybelline"
+//            dimension "makeup"
+//        }
+//        marcelle{
+//            applicationIdSuffix ".marcelle"
+//            dimension "makeup"
+//        }
+//        alva{
+//            applicationIdSuffix ".alva"
+//            dimension "makeup"
+//        }
+//    }
+
     buildTypes {
+        debug{
+
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'

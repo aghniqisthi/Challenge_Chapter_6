@@ -1,16 +1,13 @@
 package com.example.challengechapter6.workers
 
-import android.content.ContentValues.TAG
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.text.TextUtils
 import android.util.Log
-import android.widget.Toast
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
-import com.example.challengechapter6.view.ProfileActivity
 
 class BlurWorker(context : Context, params : WorkerParameters): Worker(context, params) {
     override fun doWork(): Result {

@@ -4,15 +4,9 @@ import android.app.Application
 import androidx.lifecycle.*
 import com.example.challengechapter6.model.*
 import com.example.challengechapter6.network.*
-import com.example.challengechapter6.view.HomeActivity
-import com.example.challengechapter6.view.LoginActivity
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import javax.inject.Inject
 
 class ViewModelCart (application: Application) : AndroidViewModel(application){
 

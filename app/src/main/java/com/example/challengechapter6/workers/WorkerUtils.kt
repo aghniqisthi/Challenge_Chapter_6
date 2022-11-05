@@ -1,13 +1,10 @@
 package com.example.challengechapter6.workers
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
-import android.os.Build
 import android.provider.MediaStore
 import android.renderscript.Allocation
 import android.renderscript.Element
@@ -22,7 +19,6 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.math.log
 
 fun makeStatusNotification(message: String, context: Context) {
     // Create the notification

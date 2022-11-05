@@ -15,12 +15,12 @@ class ProductAdapter (var listProduct : List<ResponseDataProductItem>) : Recycle
 
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         var view = ItemProductBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: ProductAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.binding.txtJudul.text = listProduct[position].name
         holder.binding.txtHarga.text = listProduct[position].price
         Glide.with(holder.itemView.context).load(listProduct[position].imageLink).into(holder.binding.ivItem)

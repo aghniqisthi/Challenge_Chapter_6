@@ -3,6 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/aghni/AndroidStudioProjects/ChallengeChapter6/app/src/alva/res/layout/activity_detail_favorit.xml" value="0.10260416666666666" />
+        <entry key="..\:/Users/aghni/AndroidStudioProjects/ChallengeChapter6/app/src/alva/res/layout/activity_detail_product.xml" value="0.10260416666666666" />
+        <entry key="..\:/Users/aghni/AndroidStudioProjects/ChallengeChapter6/app/src/alva/res/layout/activity_home.xml" value="0.2" />
+        <entry key="..\:/Users/aghni/AndroidStudioProjects/ChallengeChapter6/app/src/alva/res/layout/activity_profile.xml" value="0.2" />
+        <entry key="..\:/Users/aghni/AndroidStudioProjects/ChallengeChapter6/app/src/alva/res/layout/activity_register.xml" value="0.2" />
+        <entry key="..\:/Users/aghni/AndroidStudioProjects/ChallengeChapter6/app/src/alva/res/layout/activity_splash.xml" value="0.2" />
         <entry key="..\:/Users/aghni/AndroidStudioProjects/ChallengeChapter6/app/src/main/res/drawable/ic_baseline_favorite_24.xml" value="0.106" />
         <entry key="..\:/Users/aghni/AndroidStudioProjects/ChallengeChapter6/app/src/main/res/layout/activity_cart.xml" value="0.22" />
         <entry key="..\:/Users/aghni/AndroidStudioProjects/ChallengeChapter6/app/src/main/res/layout/activity_detail_favorit.xml" value="0.2" />
@@ -17,6 +23,8 @@
         <entry key="..\:/Users/aghni/AndroidStudioProjects/ChallengeChapter6/app/src/main/res/layout/item_favorit.xml" value="0.2" />
         <entry key="..\:/Users/aghni/AndroidStudioProjects/ChallengeChapter6/app/src/main/res/layout/item_product.xml" value="0.1" />
         <entry key="..\:/Users/aghni/AndroidStudioProjects/ChallengeChapter6/app/src/main/res/layout/item_productfav.xml" value="0.1" />
+        <entry key="..\:/Users/aghni/AndroidStudioProjects/ChallengeChapter6/app/src/marcelle/res/layout/activity_cart.xml" value="0.2" />
+        <entry key="..\:/Users/aghni/AndroidStudioProjects/ChallengeChapter6/app/src/marcelle/res/layout/activity_home.xml" value="0.2" />
       </map>
     </option>
   </component>

@@ -6,15 +6,13 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.challengechapter6.R
 import com.example.challengechapter6.databinding.ActivitySplashBinding
-import com.example.challengechapter6.model.ViewModelUser
+import com.example.challengechapter6.viewmodel.ViewModelUser
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import dagger.hilt.android.AndroidEntryPoint
 
 class SplashActivity : AppCompatActivity() {
 
@@ -29,15 +27,15 @@ class SplashActivity : AppCompatActivity() {
 
         Glide.with(this).asGif().load(R.drawable.gifsplash).into(binding.ivSplash)
 
-//        val crashButton = Button(this)
-//        crashButton.text = "Test Crash"
-//        crashButton.setOnClickListener {
-//            throw RuntimeException("Test Crash") // Force a crash
-//        }
-//
-//        addContentView(crashButton, ViewGroup.LayoutParams(
-//            ViewGroup.LayoutParams.MATCH_PARENT,
-//            ViewGroup.LayoutParams.WRAP_CONTENT))
+        val crashButton = Button(this)
+        crashButton.text = "Test Crash"
+        crashButton.setOnClickListener {
+            throw RuntimeException("Test Crash") // Force a crash
+        }
+
+        addContentView(crashButton, ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT))
 
         //splash : seleksi data login tersimpan atau ngga.
 //        userPref = UserPref(this)

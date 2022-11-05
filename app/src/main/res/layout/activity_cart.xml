@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.CartActivity">
+    tools:context="com.example.challengechapter6.view.CartActivity">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_margin="@dimen/margin"
         android:layout_width="match_parent"

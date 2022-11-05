@@ -1,16 +1,11 @@
-package com.example.challengechapter6
+package com.example.challengechapter6.viewmodel
 
 import android.app.Application
-import android.content.ContentResolver
-import android.content.Context
-import android.net.Uri
-import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.work.*
-import com.example.challengechapter6.view.ProfileActivity
 import com.example.challengechapter6.workers.*
 
 class BlurViewModel(application: Application) : AndroidViewModel(application) {

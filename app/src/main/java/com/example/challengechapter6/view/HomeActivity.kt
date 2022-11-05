@@ -7,15 +7,22 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.challengechapter6.R
 import com.example.challengechapter6.adapter.ProductAdapter
 import com.example.challengechapter6.databinding.ActivityHomeBinding
-import com.example.challengechapter6.model.ViewModelUser
+import com.example.challengechapter6.viewmodel.ViewModelUser
 import com.example.challengechapter6.viewmodel.ViewModelProduct
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class HomeActivity : AppCompatActivity() {
 
+    private lateinit var firebaseAuth: FirebaseAuth
+    lateinit var mGoogleSignInClient: GoogleSignInClient
     lateinit var binding: ActivityHomeBinding
     lateinit var viewModelUser : ViewModelUser
     lateinit var viewModelProduct: ViewModelProduct
@@ -27,6 +34,13 @@ class HomeActivity : AppCompatActivity() {
 
         viewModelUser = ViewModelProvider(this).get(ViewModelUser::class.java)
         viewModelProduct = ViewModelProvider(this).get(ViewModelProduct::class.java)
+        firebaseAuth = FirebaseAuth.getInstance()
+
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
 
         showData()
 

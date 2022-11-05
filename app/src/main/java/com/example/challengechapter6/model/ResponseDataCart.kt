@@ -1,6 +1,4 @@
 package com.example.challengechapter6.model
 
 
-import com.google.gson.annotations.SerializedName
-
-class ResponseDataCart : ArrayList<ResponseDataCartItem>()
+class ResponseDataCart : ArrayList<com.example.challengechapter6.model.ResponseDataCartItem>()

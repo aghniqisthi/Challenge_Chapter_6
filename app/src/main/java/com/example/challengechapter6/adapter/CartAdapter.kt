@@ -15,12 +15,12 @@ class CartAdapter (var listCart : List<ResponseDataCartItem>) : RecyclerView.Ada
 
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         var view = ItemProductfavBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: CartAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.binding.txtJudul.text = listCart[position].name
         holder.binding.txtHarga.text = listCart[position].price
         Glide.with(holder.itemView.context).load(listCart[position].imageLink).into(holder.binding.ivItem)
