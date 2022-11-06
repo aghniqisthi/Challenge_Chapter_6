@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
+import com.example.challengechapter6.workers.KEY_IMAGE_URI
 
 class SaveImageToFileWorker (context: Context, workerParameters: WorkerParameters) : Worker(context, workerParameters) {
     override fun doWork(): Result {

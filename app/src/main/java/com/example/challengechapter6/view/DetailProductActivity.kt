@@ -9,8 +9,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.challengechapter6.databinding.ActivityDetailProductBinding
 import com.example.challengechapter6.model.ResponseDataProductItem
-import com.example.challengechapter6.viewmodel.ViewModelUser
 import com.example.challengechapter6.viewmodel.ViewModelCart
+import com.example.challengechapter6.viewmodel.ViewModelUser
 
 class DetailProductActivity : AppCompatActivity() {
 

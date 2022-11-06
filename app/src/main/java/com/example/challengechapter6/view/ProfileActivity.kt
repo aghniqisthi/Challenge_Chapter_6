@@ -20,9 +20,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.work.WorkInfo
 import com.bumptech.glide.Glide
-import com.example.challengechapter6.viewmodel.BlurViewModel
 import com.example.challengechapter6.R
 import com.example.challengechapter6.databinding.ActivityProfileBinding
+import com.example.challengechapter6.view.HomeActivity
+import com.example.challengechapter6.viewmodel.BlurViewModel
 import com.example.challengechapter6.viewmodel.ViewModelUser
 import com.example.challengechapter6.workers.KEY_PROGRESS
 import com.google.android.gms.auth.api.signin.GoogleSignIn

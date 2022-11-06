@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="margin">25dp</dimen>
+    <dimen name="title">27sp</dimen>
+    <dimen name="product_name">24sp</dimen>
+    <dimen name="text">20sp</dimen>
+    <dimen name="radius">10dp</dimen>
+    <dimen name="image">250dp</dimen>
+</resources>

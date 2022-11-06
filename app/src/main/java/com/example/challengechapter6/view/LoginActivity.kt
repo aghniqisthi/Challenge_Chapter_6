@@ -11,8 +11,8 @@ import androidx.lifecycle.observe
 import com.example.challengechapter6.R
 import com.example.challengechapter6.databinding.ActivityLoginBinding
 import com.example.challengechapter6.model.ResponseDataUserItem
-import com.example.challengechapter6.viewmodel.ViewModelUser
 import com.example.challengechapter6.network.RetrofitClientUser
+import com.example.challengechapter6.viewmodel.ViewModelUser
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient

@@ -27,21 +27,20 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-//    flavorDimensions("makeup")
-//    productFlavors{
-//        maybelline{
-//            applicationIdSuffix ".maybelline"
-//            dimension "makeup"
+    flavorDimensions("makeup")
+    productFlavors{
+        maybelline{
+            applicationIdSuffix ".main"
+            dimension "makeup"
+        }
+        marcelle{
+            applicationIdSuffix ".marcelle"
+            dimension "makeup"
+        }
+//        covergirl{
+//            applicationIdSuffix ".covergirl"
 //        }
-//        marcelle{
-//            applicationIdSuffix ".marcelle"
-//            dimension "makeup"
-//        }
-//        alva{
-//            applicationIdSuffix ".alva"
-//            dimension "makeup"
-//        }
-//    }
+    }
 
     buildTypes {
         debug{

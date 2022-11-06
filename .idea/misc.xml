@@ -24,7 +24,16 @@
         <entry key="..\:/Users/aghni/AndroidStudioProjects/ChallengeChapter6/app/src/main/res/layout/item_product.xml" value="0.1" />
         <entry key="..\:/Users/aghni/AndroidStudioProjects/ChallengeChapter6/app/src/main/res/layout/item_productfav.xml" value="0.1" />
         <entry key="..\:/Users/aghni/AndroidStudioProjects/ChallengeChapter6/app/src/marcelle/res/layout/activity_cart.xml" value="0.2" />
-        <entry key="..\:/Users/aghni/AndroidStudioProjects/ChallengeChapter6/app/src/marcelle/res/layout/activity_home.xml" value="0.2" />
+        <entry key="..\:/Users/aghni/AndroidStudioProjects/ChallengeChapter6/app/src/marcelle/res/layout/activity_detail_favorit.xml" value="0.1" />
+        <entry key="..\:/Users/aghni/AndroidStudioProjects/ChallengeChapter6/app/src/marcelle/res/layout/activity_detail_product.xml" value="0.1" />
+        <entry key="..\:/Users/aghni/AndroidStudioProjects/ChallengeChapter6/app/src/marcelle/res/layout/activity_home.xml" value="0.25" />
+        <entry key="..\:/Users/aghni/AndroidStudioProjects/ChallengeChapter6/app/src/marcelle/res/layout/activity_login.xml" value="0.1" />
+        <entry key="..\:/Users/aghni/AndroidStudioProjects/ChallengeChapter6/app/src/marcelle/res/layout/activity_main.xml" value="0.2" />
+        <entry key="..\:/Users/aghni/AndroidStudioProjects/ChallengeChapter6/app/src/marcelle/res/layout/activity_profile.xml" value="0.1" />
+        <entry key="..\:/Users/aghni/AndroidStudioProjects/ChallengeChapter6/app/src/marcelle/res/layout/activity_register.xml" value="0.1" />
+        <entry key="..\:/Users/aghni/AndroidStudioProjects/ChallengeChapter6/app/src/marcelle/res/layout/activity_splash.xml" value="0.1" />
+        <entry key="..\:/Users/aghni/AndroidStudioProjects/ChallengeChapter6/app/src/marcelle/res/layout/item_product.xml" value="0.1" />
+        <entry key="..\:/Users/aghni/AndroidStudioProjects/ChallengeChapter6/app/src/marcelle/res/layout/item_productfav.xml" value="0.1" />
       </map>
     </option>
   </component>
