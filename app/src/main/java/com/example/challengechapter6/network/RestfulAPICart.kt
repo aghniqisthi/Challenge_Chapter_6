@@ -13,5 +13,5 @@ interface RestfulAPICart {
     fun addCart(@Path("idu") idu : Int, @Body request : Cart) : Call<ResponseDataCartItem>
 
     @DELETE("users/{idu}/cart/{idc}")
-    fun deleteCart(@Path("idu") idu : Int, @Path("idc") idc : Int) : Call<Int>
+    fun deleteCart(@Path("idu") idu : Int, @Path("idc") idc : Int) : Call<ResponseDataCartItem>
 }

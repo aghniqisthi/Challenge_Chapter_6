@@ -12,7 +12,7 @@ class ViewModelCart (application: Application) : AndroidViewModel(application){
 
     var liveDataCart : MutableLiveData<List<ResponseDataCartItem>>
     lateinit var postLDCart : MutableLiveData<ResponseDataCartItem>
-    lateinit var deleteCart : MutableLiveData<Int>
+    lateinit var deleteCart : MutableLiveData<ResponseDataCartItem>
 
     init {
         liveDataCart = MutableLiveData()
@@ -26,7 +26,7 @@ class ViewModelCart (application: Application) : AndroidViewModel(application){
     fun addLiveDataCart() : MutableLiveData<ResponseDataCartItem> {
         return postLDCart
     }
-    fun getdeleteCart(): MutableLiveData<Int> {
+    fun getdeleteCart(): MutableLiveData<ResponseDataCartItem> {
         return deleteCart
     }
 
@@ -56,19 +56,18 @@ class ViewModelCart (application: Application) : AndroidViewModel(application){
             override fun onFailure(call: Call<ResponseDataCartItem>, t: Throwable) {
 
             }
-
-        })
+            })
     }
 
     fun callDeleteCart(idu:Int, idc: Int) {
-        RetrofitClientCart.instance.deleteCart(idu, idc).enqueue(object : Callback<Int> {
-            override fun onResponse(call: Call<Int>, response: Response<Int>) {
+        RetrofitClientCart.instance.deleteCart(idu, idc).enqueue(object : Callback<ResponseDataCartItem> {
+            override fun onResponse(call: Call<ResponseDataCartItem>, response: Response<ResponseDataCartItem>) {
                 if (response.isSuccessful) {
                     deleteCart.postValue(response.body())
                 }
                 callApiCart(idu)
             }
-            override fun onFailure(call: Call<Int>, t: Throwable) {
+            override fun onFailure(call: Call<ResponseDataCartItem>, t: Throwable) {
                 callApiCart(idu)
             }
         })
