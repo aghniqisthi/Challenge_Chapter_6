@@ -10,7 +10,6 @@ import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.challengechapter6.adapter.CartAdapter
 import com.example.challengechapter6.databinding.ActivityCartBinding
-import com.example.challengechapter6.view.HomeActivity
 import com.example.challengechapter6.viewmodel.ViewModelCart
 import com.example.challengechapter6.viewmodel.ViewModelUser
 

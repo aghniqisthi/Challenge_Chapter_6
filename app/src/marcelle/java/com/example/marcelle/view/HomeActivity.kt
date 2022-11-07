@@ -1,4 +1,4 @@
-package com.example.marcelle.network
+package com.example.marcelle.view
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -7,26 +7,29 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.challengechapter6.ProductApps
 import com.example.challengechapter6.R
-import com.example.challengechapter6.view.CartActivity
-import com.example.challengechapter6.view.ProfileActivity
-import com.example.challengechapter6.viewmodel.ViewModelUser
+import com.example.challengechapter6.databinding.ActivityHomeBinding
+import com.example.marcelle.adapter.ProductAdapter
+import com.example.marcelle.viewmodel.ViewModelProduct
+import com.example.marcelle.viewmodel.ViewModelUser
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.android.synthetic.marcelle.activity_home.*
 
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var firebaseAuth: FirebaseAuth
     lateinit var mGoogleSignInClient: GoogleSignInClient
+    lateinit var binding: ActivityHomeBinding
     lateinit var viewModelUser : ViewModelUser
     lateinit var viewModelProduct: ViewModelProduct
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_home)
+        binding = ActivityHomeBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         viewModelUser = ViewModelProvider(this).get(ViewModelUser::class.java)
         viewModelProduct = ViewModelProvider(this).get(ViewModelProduct::class.java)
@@ -40,12 +43,12 @@ class HomeActivity : AppCompatActivity() {
 
         showData()
 
-        btnProfile.setOnClickListener {
+        binding.btnProfile.setOnClickListener {
             val pindah = Intent(this, ProfileActivity::class.java)
             startActivity(pindah)
         }
 
-        btnFavorit.setOnClickListener {
+        binding.btnFavorit.setOnClickListener {
             val pindah = Intent(this, CartActivity::class.java)
             startActivity(pindah)
         }
@@ -53,12 +56,12 @@ class HomeActivity : AppCompatActivity() {
 
     fun showData(){
         viewModelUser.dataUser.observe(this, Observer {
-            txtWelcomeUser.text = it.username
+            binding.txtWelcomeUser.text = it.username
         })
         viewModelProduct.getliveDataProduct().observe(this, Observer {
             if (it != null) {
-                rvProductMarcelle.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-                rvProductMarcelle.adapter = ProductAdapter(it)
+                binding.rvProductMarcelle.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+                binding.rvProductMarcelle.adapter = ProductAdapter(it)
             } else {
                 Toast.makeText(this, "There is no data to show", Toast.LENGTH_SHORT).show()
             }
